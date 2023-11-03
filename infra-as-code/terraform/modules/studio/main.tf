@@ -21,6 +21,18 @@ resource "twilio_studio_flows_v2" "messaging" {
   definition = templatefile("../../studio/messaging-flow.json", local.params)
 }
 
+resource "twilio_studio_flows_v2" "sms-survey" {
+  friendly_name  = "sms-survey"
+  status         = "published"
+  definition = templatefile("../../studio/sms-survey.json", local.params)
+}
+
+resource "twilio_studio_flows_v2" "voice-survey" {
+  friendly_name  = "voice-survey"
+  status         = "published"
+  definition = templatefile("../../studio/voice-survey.json", local.params)
+}
+
 # FEATURE: callback-and-voicemail
 # FEATURE: schedule-manager
 resource "twilio_studio_flows_v2" "voice" {

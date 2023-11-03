@@ -1,0 +1,150 @@
+{
+  "description": "A New Flow",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "event": "incomingMessage"
+        },
+        {
+          "next": "check_phone_number",
+          "event": "incomingCall"
+        },
+        {
+          "event": "incomingConversationMessage"
+        },
+        {
+          "event": "incomingRequest"
+        },
+        {
+          "event": "incomingParent"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 20,
+          "y": 20
+        }
+      }
+    },
+    {
+      "name": "say_play_1",
+      "type": "say-play",
+      "transitions": [
+        {
+          "next": "function_1",
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "voice": "Polly.Ivy",
+        "offset": {
+          "x": 150,
+          "y": 880
+        },
+        "loop": 1,
+        "say": "We appreciate your feedback. Have a wonderful day",
+        "language": "en-US"
+      }
+    },
+    {
+      "name": "check_phone_number",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "event": "noMatch"
+        },
+        {
+          "next": "gather_1",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to true",
+              "arguments": ["{{trigger.call.Param_calledPhoneNumber}}"],
+              "type": "contains",
+              "value": "+15484904615"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{trigger.call.Param_calledPhoneNumber}}",
+        "offset": {
+          "x": 150,
+          "y": 260
+        }
+      }
+    },
+    {
+      "name": "gather_1",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "say_play_1",
+          "event": "keypress"
+        },
+        {
+          "event": "speech"
+        },
+        {
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "voice": "Polly.Ivy",
+        "number_of_digits": 1,
+        "speech_timeout": "auto",
+        "offset": {
+          "x": 150,
+          "y": 580
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "say": "Please press 1 if you are happy with the service provided or press 9 if you are dissatisfied.",
+        "language": "en-US",
+        "stop_gather": true,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 5
+      }
+    },
+    {
+      "name": "function_1",
+      "type": "run-function",
+      "transitions": [
+        {
+          "event": "success"
+        },
+        {
+          "event": "fail"
+        }
+      ],
+      "properties": {
+        "service_sid": "ZSb165c3cb52617d7b06387d2c2c58db7d",
+        "environment_sid": "ZE0fd05965cebcd85b37c70d917e43e07c",
+        "offset": {
+          "x": 150,
+          "y": 1120
+        },
+        "function_sid": "ZHed2923b6c2dc6891c9d0db226d4f5f24",
+        "parameters": [
+          {
+            "value": "{{trigger.call.Param_taskSid}}",
+            "key": "taskSid"
+          },
+          {
+            "value": "{{widgets.gather_1.Digits}}",
+            "key": "customerRating"
+          }
+        ],
+        "url": "https://custom-flex-extensions-serverless-5850-dev.twil.io/survey"
+      }
+    }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
+  }
+}

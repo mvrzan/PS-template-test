@@ -1,0 +1,126 @@
+{
+  "description": "A New Flow",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "event": "incomingMessage"
+        },
+        {
+          "event": "incomingCall"
+        },
+        {
+          "next": "send_and_reply_1",
+          "event": "incomingConversationMessage"
+        },
+        {
+          "event": "incomingRequest"
+        },
+        {
+          "event": "incomingParent"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 20,
+          "y": 20
+        }
+      }
+    },
+    {
+      "name": "send_message_1",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "function_1",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 270,
+          "y": 540
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "message_type": "custom",
+        "to": "{{contact.channel.address}}",
+        "body": "We appreciate your feedback. Have a wonderful day!"
+      }
+    },
+    {
+      "name": "send_and_reply_1",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "send_message_1",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 270,
+          "y": 260
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "message_type": "custom",
+        "body": "Please press 1 if you are happy with the service provided or press 9 if you are dissatisfied.",
+        "timeout": "300"
+      }
+    },
+    {
+      "name": "function_1",
+      "type": "run-function",
+      "transitions": [
+        {
+          "event": "success"
+        },
+        {
+          "event": "fail"
+        }
+      ],
+      "properties": {
+        "service_sid": "ZSb165c3cb52617d7b06387d2c2c58db7d",
+        "environment_sid": "ZE0fd05965cebcd85b37c70d917e43e07c",
+        "offset": {
+          "x": 270,
+          "y": 790
+        },
+        "function_sid": "ZH23e6f2b68344c1c237a01c22d852c46b",
+        "parameters": [
+          {
+            "value": "{{trigger.conversation.ChannelAttributes.taskSid}}",
+            "key": "taskSid"
+          },
+          {
+            "value": "{{widgets.send_and_reply_1.inbound.Body}}",
+            "key": "customerRating"
+          },
+          {
+            "value": "{{trigger.conversation.ConversationSid}}",
+            "key": "conversationSid"
+          }
+        ],
+        "url": "https://custom-flex-extensions-serverless-5850-dev.twil.io/sms-suvery"
+      }
+    }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
+  }
+}
