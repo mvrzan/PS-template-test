@@ -1,7 +1,8 @@
 #!/bin/bash
 # This script will push the Terraform State to a Twilio Function as an asset.
 set -e
-project_name=tfstate
+source ./config.sh
+project_name=$tfstate_service_name
 
 echo "Trying to Export Terraform State for $ENVIRONMENT"
 IFS="|" read -ra tf_state_files <<<"$TF_STATE_FILES"
@@ -34,5 +35,5 @@ verify_function=$(cat ./verify-signature.js)
 echo "$package_json" >./$project_name/package.json
 echo "$verify_function" >./$project_name/functions/verify-function.js
 
-twilio serverless:deploy --assets --production --override-existing-project --cwd="./$project_name"
+npx twilio serverless:deploy --assets --production --override-existing-project --cwd="./$project_name"
 rm -rf $project_name
