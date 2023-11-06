@@ -65,6 +65,8 @@ importInternalState() {
 	import_resource "$queues" "Everyone" "module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.everyone" "friendlyName"
 	import_resource "$queues" "Template Example Sales" "module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.template_example_sales" "friendlyName"
 	import_resource "$queues" "Template Example Support" "module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.template_example_support" "friendlyName"
+	import_resource "$queues" "Profs" "module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.profs" "friendlyName"
+	import_resource "$queues" "Survey" "twilio_taskrouter_workspaces_task_queues_v1.survey" "friendlyName"
 # END FEATURE: remove-all
 
 # FEATURE: internal-call
@@ -76,6 +78,8 @@ importInternalState() {
 	channels=$(npx twilio api:taskrouter:v1:workspaces:task-channels:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
 	import_resource "$channels" "voice" "module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.voice" "uniqueName"
 	import_resource "$channels" "chat" "module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.chat" "uniqueName"
+	import_resource "$channels" "survey" "module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.survey" "uniqueName"
+	import_resource "$channels" "sms" "module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.sms" "uniqueName"
 	echo "   - :white_check_mark: Task Router - Channels" >>$GITHUB_STEP_SUMMARY
 
 	activities=$(npx twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
