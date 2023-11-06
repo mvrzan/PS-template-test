@@ -83,17 +83,17 @@
   },
   "SURVEY_TASK_AND_CONVERSATION_FUNCTION_SID": {
     "type": "serverless-function",
-    "name": "/sms-survey-task-update",
+    "name": "/features/sms-surveys/sms-survey-task-update",
     "parent": "SERVERLESS_SID"
   },
   "SURVEY_TASK_FUNCTION_SID": {
     "type": "serverless-function",
-    "name": "/survey-task-update",
+    "name": "/features/voice-postcall-surveys/survey-task-update",
     "parent": "SERVERLESS_SID"
   },
   "CLOSE_CONVERSATION_FUNCTION_SID": {
     "type": "serverless-function",
-    "name": "/close_conversation",
+    "name": "/features/sms-studio-flow-support/close_conversation",
     "parent": "SERVERLESS_SID"
   }
 }
