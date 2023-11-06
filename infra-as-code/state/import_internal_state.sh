@@ -66,7 +66,7 @@ importInternalState() {
 	import_resource "$queues" "Template Example Sales" "module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.template_example_sales" "friendlyName"
 	import_resource "$queues" "Template Example Support" "module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.template_example_support" "friendlyName"
 	import_resource "$queues" "Profs" "module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.profs" "friendlyName"
-	import_resource "$queues" "Survey" "twilio_taskrouter_workspaces_task_queues_v1.survey" "friendlyName"
+	import_resource "$queues" "Survey" "module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.survey" "friendlyName"
 # END FEATURE: remove-all
 
 # FEATURE: internal-call
