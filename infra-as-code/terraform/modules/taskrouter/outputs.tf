@@ -9,6 +9,16 @@ output "workflow_sid_assign_to_anyone" {
   description = "Assign To Anyone workflow SID"
 }
 
+output "workflow_sid_direct_sms_match_subject_group" {
+  value = twilio_taskrouter_workspaces_workflows_v1.direct_sms_match_subject_group.sid
+  description = "Assign To Anyone workflow SID"
+}
+
+output "workflow_sid_direct_phone_match_subject_group" {
+  value = twilio_taskrouter_workspaces_workflows_v1.direct_phone_match_subject_group.sid
+  description = "Assign To Anyone workflow SID"
+}
+
 output "workflow_sid_assign_to_anyone_prof" {
   value = twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone_prof.sid
   description = "Assign To Anyone workflow SID"
@@ -46,5 +56,10 @@ output "chat_channel_sid" {
 output "voice_channel_sid" {
   value = twilio_taskrouter_workspaces_task_channels_v1.voice.sid
   description = "Voice channel SID"
+}
+
+output "sms_channel_sid" {
+  value = twilio_taskrouter_workspaces_task_channels_v1.sms.sid
+  description = "SMS channel SID"
 }
 
