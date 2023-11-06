@@ -122,13 +122,13 @@
         }
       ],
       "properties": {
-        "service_sid": "ZSb165c3cb52617d7b06387d2c2c58db7d",
-        "environment_sid": "ZE0fd05965cebcd85b37c70d917e43e07c",
+        "service_sid": "${SERVERLESS_SID}",
+        "environment_sid": "${SERVERLESS_ENV_SID}",
         "offset": {
           "x": 150,
           "y": 1120
         },
-        "function_sid": "ZHed2923b6c2dc6891c9d0db226d4f5f24",
+        "function_sid": "${SURVEY_TASK_FUNCTION_SID}",
         "parameters": [
           {
             "value": "{{trigger.call.Param_taskSid}}",
@@ -139,7 +139,7 @@
             "key": "customerRating"
           }
         ],
-        "url": "https://custom-flex-extensions-serverless-5850-dev.twil.io/survey"
+        "url": "https://${SERVERLESS_DOMAIN}/features/voice-postcall-surveys/survey-task-update"
       }
     }
   ],

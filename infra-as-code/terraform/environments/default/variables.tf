@@ -51,6 +51,33 @@ variable "SERVERLESS_ENV_SID" {
   }
 }
 
+variable "SURVEY_TASK_AND_CONVERSATION_FUNCTION_SID" {
+  type        = string
+  description = "check schedule function sid"
+  validation {
+    condition     = length(var.SURVEY_TASK_AND_CONVERSATION_FUNCTION_SID) > 2 && substr(var.SURVEY_TASK_AND_CONVERSATION_FUNCTION_SID, 0, 2) == "ZH"
+    error_message = "SURVEY_TASK_AND_CONVERSATION_FUNCTION_SID expected to start with \"ZH\"."
+  }
+}
+
+variable "SURVEY_TASK_FUNCTION_SID" {
+  type        = string
+  description = "check schedule function sid"
+  validation {
+    condition     = length(var.SURVEY_TASK_FUNCTION_SID) > 2 && substr(var.SURVEY_TASK_FUNCTION_SID, 0, 2) == "ZH"
+    error_message = "SURVEY_TASK_FUNCTION_SID expected to start with \"ZH\"."
+  }
+}
+
+variable "CLOSE_CONVERSATION_FUNCTION_SID" {
+  type        = string
+  description = "check schedule function sid"
+  validation {
+    condition     = length(var.CLOSE_CONVERSATION_FUNCTION_SID) > 2 && substr(var.CLOSE_CONVERSATION_FUNCTION_SID, 0, 2) == "ZH"
+    error_message = "CLOSE_CONVERSATION_FUNCTION_SID expected to start with \"ZH\"."
+  }
+}
+
 # FEATURE: schedule-manager
 
 variable "SCHEDULE_MANAGER_DOMAIN" {

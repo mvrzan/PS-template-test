@@ -1,0 +1,871 @@
+{
+  "description": "FLEX - Direct phone flow",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "event": "incomingMessage"
+        },
+        {
+          "next": "regional_code",
+          "event": "incomingCall"
+        },
+        {
+          "event": "incomingConversationMessage"
+        },
+        {
+          "event": "incomingRequest"
+        },
+        {
+          "event": "incomingParent"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -500,
+          "y": -1110
+        }
+      }
+    },
+    {
+      "name": "set_subject",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "set_subject_group_name",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{%- if widgets.waiting_message_sec.Digits == '1' -%}\n  math_1_2\n{%- elsif widgets.waiting_message_sec.Digits == '2' -%}\n  math_3_5\n{%- elsif widgets.waiting_message_sec.Digits == '3' -%}\n  francais\n{%- elsif widgets.waiting_message_sec.Digits == '4' -%}\n  sciences\n{%- elsif widgets.waiting_message_sec.Digits == '5' -%}\n  geo_histoire\n{%- elsif widgets.waiting_message_sec.Digits == '6' -%}\n  anglais\n{%- elsif widgets.waiting_message_sec.Digits == '7' -%}\n  autre\n{%- endif -%}",
+            "key": "subject_group"
+          }
+        ],
+        "offset": {
+          "x": 240,
+          "y": 2480
+        }
+      }
+    },
+    {
+      "name": "send_to_agent",
+      "type": "send-to-flex",
+      "transitions": [
+        {
+          "event": "callComplete"
+        },
+        {
+          "event": "failedToEnqueue"
+        },
+        {
+          "event": "callFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -210,
+          "y": 2480
+        },
+        "workflow": "${WORKFLOW_SID_DIRECT_PHONE_MATCH_SUBJECT_GROUP}",
+        "channel": "${VOICE_CHANNEL_SID}",
+        "attributes": "{\n\"name\": \"Appel direct: Primaire\",\n\"subject_group\": \"primaire\",\n\"language\": \"service_francais\",\n\"conversations\": {\n\"conversation_attribute_1\":  \"primaire\",\n\"conversation_attribute_3\":  \"{{widgets.set_subject.subject_group}}\",\n\"conversation_attribute_5\":  \"appel_direct\",\n\"conversation_attribute_6\":\n\"{{widgets.is_testing.testing}}\",\n\"conversation_attribute_7\":\"service_francais\"\n}\n}",
+        "priority": "50"
+      }
+    },
+    {
+      "name": "is_testing",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "testing",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{%- if trigger.call.To == '+14386013307'  -%}\ntrue\n{%- endif -%}",
+            "key": "testing"
+          }
+        ],
+        "offset": {
+          "x": -190,
+          "y": -100
+        }
+      }
+    },
+    {
+      "name": "testing",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "check_schedule",
+          "event": "noMatch"
+        },
+        {
+          "next": "welcome_message_open",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to True",
+              "arguments": ["{{widgets.is_testing.testing}}"],
+              "type": "equal_to",
+              "value": "True"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.is_testing.testing}}",
+        "offset": {
+          "x": -190,
+          "y": 130
+        }
+      }
+    },
+    {
+      "name": "welcome_message_closed",
+      "type": "say-play",
+      "transitions": [
+        {
+          "next": "scheduler_closed_message_audio",
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/ap-bienvenue.wav",
+        "offset": {
+          "x": -1210,
+          "y": 1000
+        },
+        "loop": 1
+      }
+    },
+    {
+      "name": "closed_message",
+      "type": "say-play",
+      "transitions": [
+        {
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/ap-ferme.wav",
+        "offset": {
+          "x": -2010,
+          "y": 1030
+        },
+        "loop": 1
+      }
+    },
+    {
+      "name": "welcome_message_open",
+      "type": "say-play",
+      "transitions": [
+        {
+          "next": "language_select",
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/ap-bienvenue.wav",
+        "offset": {
+          "x": -30,
+          "y": 460
+        },
+        "loop": 1
+      }
+    },
+    {
+      "name": "choix_niveau",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "Choix",
+          "event": "keypress"
+        },
+        {
+          "event": "speech"
+        },
+        {
+          "next": "choix_niveau",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/ap-choixniveau.wav",
+        "number_of_digits": 1,
+        "speech_timeout": "auto",
+        "offset": {
+          "x": -210,
+          "y": 1470
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "stop_gather": true,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 5
+      }
+    },
+    {
+      "name": "Choix",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "event": "noMatch"
+        },
+        {
+          "next": "waiting_message_primaire",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to 1",
+              "arguments": ["{{widgets.choix_niveau.Digits}}"],
+              "type": "equal_to",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "next": "waiting_message_sec",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to 2",
+              "arguments": ["{{widgets.choix_niveau.Digits}}"],
+              "type": "equal_to",
+              "value": "2"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.choix_niveau.Digits}}",
+        "offset": {
+          "x": -210,
+          "y": 1780
+        }
+      }
+    },
+    {
+      "name": "waiting_message_primaire",
+      "type": "say-play",
+      "transitions": [
+        {
+          "next": "send_to_agent",
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/ap-choix.wav",
+        "offset": {
+          "x": -220,
+          "y": 2210
+        },
+        "loop": 1
+      }
+    },
+    {
+      "name": "waiting_message_sec",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "set_subject",
+          "event": "keypress"
+        },
+        {
+          "event": "speech"
+        },
+        {
+          "next": "waiting_message_sec",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/ap-choixmatiere.wav",
+        "number_of_digits": 1,
+        "speech_timeout": "auto",
+        "offset": {
+          "x": 230,
+          "y": 2210
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "stop_gather": true,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 5
+      }
+    },
+    {
+      "name": "set_subject_group_name",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "waiting_message_secondary",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{%- if widgets.set_subject.subject_group == 'math_1_2' -%}\nMath sec 1 et 2\n{%- elsif widgets.set_subject.subject_group == 'math_3_5' -%}\nMath sec 1 à 2\n{%- elsif widgets.set_subject.subject_group == 'francais'  -%}\nFrançais\n{%- elsif widgets.set_subject.subject_group == 'sciences'  -%}\nsciences\n{%- elsif widgets.set_subject.subject_group == 'geo_histoire'  -%}\ngeo_histoire\n{%- elsif widgets.set_subject.subject_group == 'anglais'  -%}\nanglais\n{%- elsif widgets.set_subject.subject_group == 'autre'  -%}\nautre\n{%- endif -%}",
+            "key": "subject_group_name"
+          }
+        ],
+        "offset": {
+          "x": 240,
+          "y": 2720
+        }
+      }
+    },
+    {
+      "name": "send_to_agent_sec",
+      "type": "send-to-flex",
+      "transitions": [
+        {
+          "event": "callComplete"
+        },
+        {
+          "event": "failedToEnqueue"
+        },
+        {
+          "event": "callFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 240,
+          "y": 3230
+        },
+        "workflow": "${WORKFLOW_SID_DIRECT_PHONE_MATCH_SUBJECT_GROUP}",
+        "channel": "${VOICE_CHANNEL_SID}",
+        "attributes": "{\n\"name\": \"Appel direct: Sec. {{widgets.set_subject.subject_group}}\",\n\"subject_group\": \"{{widgets.set_subject.subject_group}}\",\n\"language\": \"service_francais\",\n\"conversations\": {\n\"conversation_attribute_1\":  \"secondaire\",\n\"conversation_attribute_3\":  \"{{widgets.set_subject.subject_group}}\",\n\"conversation_attribute_5\":  \"appel_direct\",\n\"conversation_attribute_6\":\n\"{{widgets.is_testing.testing}}\",\n\"conversation_attribute_7\":\"service_francais\"\n}\n}",
+        "priority": "50"
+      }
+    },
+    {
+      "name": "en_choix_niveau",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "en_Choix",
+          "event": "keypress"
+        },
+        {
+          "event": "speech"
+        },
+        {
+          "next": "en_choix_niveau",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/en_ap-choixniveau.wav",
+        "voice": "alice",
+        "number_of_digits": 1,
+        "speech_timeout": "auto",
+        "offset": {
+          "x": 820,
+          "y": 1440
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "language": "en-CA",
+        "stop_gather": true,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 5
+      }
+    },
+    {
+      "name": "en_Choix",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "event": "noMatch"
+        },
+        {
+          "next": "en_waiting_message_primaire",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to 1",
+              "arguments": ["{{widgets.en_choix_niveau.Digits}}"],
+              "type": "equal_to",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "next": "en_waiting_message_sec",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to 2",
+              "arguments": ["{{widgets.en_choix_niveau.Digits}}"],
+              "type": "equal_to",
+              "value": "2"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.en_choix_niveau.Digits}}",
+        "offset": {
+          "x": 820,
+          "y": 1800
+        }
+      }
+    },
+    {
+      "name": "en_waiting_message_primaire",
+      "type": "say-play",
+      "transitions": [
+        {
+          "next": "en_send_to_agent",
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/en_ap-choix.wav",
+        "voice": "alice",
+        "offset": {
+          "x": 780,
+          "y": 2220
+        },
+        "loop": 1,
+        "language": "en-CA"
+      }
+    },
+    {
+      "name": "en_send_to_agent",
+      "type": "send-to-flex",
+      "transitions": [
+        {
+          "event": "callComplete"
+        },
+        {
+          "event": "failedToEnqueue"
+        },
+        {
+          "event": "callFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 780,
+          "y": 2490
+        },
+        "workflow": "${WORKFLOW_SID_DIRECT_PHONE_MATCH_SUBJECT_GROUP}",
+        "channel": "${VOICE_CHANNEL_SID}",
+        "attributes": "{\n\"name\": \"Appel direct: Primaire\",\n\"subject_group\": \"primaire\",\n\"language\": \"service_anglais\",\n\"conversations\": {\n\"conversation_attribute_1\":  \"primaire\",\n\"conversation_attribute_3\":  \"\",\n\"conversation_attribute_5\":  \"appel_direct\",\n\"conversation_attribute_6\":\n\"{{widgets.is_testing.testing}}\",\n\"conversation_attribute_7\":\"service_anglais\"\n}\n}"
+      }
+    },
+    {
+      "name": "en_waiting_message_sec",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "en_set_subject",
+          "event": "keypress"
+        },
+        {
+          "event": "speech"
+        },
+        {
+          "next": "en_waiting_message_sec",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/en_ap-choixmatiere.wav",
+        "number_of_digits": 1,
+        "speech_timeout": "auto",
+        "offset": {
+          "x": 1250,
+          "y": 2230
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "stop_gather": true,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 5
+      }
+    },
+    {
+      "name": "en_set_subject",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "en_set_subject_group_name",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{%- if widgets.en_waiting_message_sec.Digits == '1' -%}\n  math_1_2\n{%- elsif widgets.en_waiting_message_sec.Digits == '2' -%}\n  math_3_5\n{%- elsif widgets.en_waiting_message_sec.Digits == '3' -%}\n  francais\n{%- elsif widgets.en_waiting_message_sec.Digits == '4' -%}\n  sciences\n{%- elsif widgets.en_waiting_message_sec.Digits == '5' -%}\n  geo_histoire\n{%- elsif widgets.en_waiting_message_sec.Digits == '6' -%}\n  anglais\n{%- elsif widgets.en_waiting_message_sec.Digits == '7' -%}\n  autre\n{%- endif -%}",
+            "key": "subject_group"
+          }
+        ],
+        "offset": {
+          "x": 1260,
+          "y": 2480
+        }
+      }
+    },
+    {
+      "name": "en_set_subject_group_name",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "en_waiting_message_secondary",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{%- if widgets.en_set_subject.subject_group == 'math_1_2' -%}\nMath sec 1 et 2\n{%- elsif widgets.en_set_subject.subject_group == 'math_3_5' -%}\nMath sec 1 à 2\n{%- elsif widgets.en_set_subject.subject_group == 'francais'  -%}\nFrançais\n{%- elsif widgets.en_set_subject.subject_group == 'sciences'  -%}\nsciences\n{%- elsif widgets.en_set_subject.subject_group == 'geo_histoire'  -%}\ngeo_histoire\n{%- elsif widgets.en_set_subject.subject_group == 'anglais'  -%}\nanglais\n{%- elsif widgets.en_set_subject.subject_group == 'autre'  -%}\nautre\n{%- endif -%}",
+            "key": "subject_group_name"
+          }
+        ],
+        "offset": {
+          "x": 1260,
+          "y": 2700
+        }
+      }
+    },
+    {
+      "name": "en_send_to_agent_sec",
+      "type": "send-to-flex",
+      "transitions": [
+        {
+          "event": "callComplete"
+        },
+        {
+          "event": "failedToEnqueue"
+        },
+        {
+          "event": "callFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1280,
+          "y": 3210
+        },
+        "workflow": "${WORKFLOW_SID_DIRECT_PHONE_MATCH_SUBJECT_GROUP}",
+        "channel": "${VOICE_CHANNEL_SID}",
+        "attributes": "{\n\"name\": \"Appel direct: Sec. {{widgets.en_set_subject.subject_group}}\",\n\"subject_group\": \"{{widgets.en_set_subject.subject_group}}\",\n\"language\": \"service_anglais\",\n\"conversations\": {\n\"conversation_attribute_1\":  \"secondaire\",\n\"conversation_attribute_3\":  \"{{widgets.en_set_subject.subject_group}}\",\n\"conversation_attribute_5\":  \"appel_direct\",\n\"conversation_attribute_6\":\n\"{{widgets.is_testing.testing}}\",\n\"conversation_attribute_7\":\"service_anglais\"\n}\n}"
+      }
+    },
+    {
+      "name": "language_select",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "language_split",
+          "event": "keypress"
+        },
+        {
+          "event": "speech"
+        },
+        {
+          "next": "language_select",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/en_ap-choix-langue.wav",
+        "voice": "alice",
+        "number_of_digits": 1,
+        "speech_timeout": "auto",
+        "offset": {
+          "x": -30,
+          "y": 800
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "language": "fr-CA",
+        "stop_gather": true,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 6
+      }
+    },
+    {
+      "name": "language_split",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "language_select",
+          "event": "noMatch"
+        },
+        {
+          "next": "choix_niveau",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to 1",
+              "arguments": ["{{widgets.language_select.Digits}}"],
+              "type": "equal_to",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "next": "en_choix_niveau",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to 2",
+              "arguments": ["{{widgets.language_select.Digits}}"],
+              "type": "equal_to",
+              "value": "2"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.language_select.Digits}}",
+        "offset": {
+          "x": -210,
+          "y": 1090
+        }
+      }
+    },
+    {
+      "name": "regional_code",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "is_local",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{{trigger.call.From | slice : 2,3}}",
+            "key": "regional_code"
+          }
+        ],
+        "offset": {
+          "x": -350,
+          "y": -860
+        }
+      }
+    },
+    {
+      "name": "is_local",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "split_by_region",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{% if widgets.regional_code.regional_code == \"263\" \nor widgets.regional_code.regional_code == \"354\" \nor widgets.regional_code.regional_code == \"367\" \nor widgets.regional_code.regional_code == \"418\" \nor widgets.regional_code.regional_code == \"438\" \nor widgets.regional_code.regional_code == \"450\" \nor widgets.regional_code.regional_code == \"468\" \nor widgets.regional_code.regional_code == \"514\" \nor widgets.regional_code.regional_code == \"579\" \nor widgets.regional_code.regional_code == \"581\" \nor widgets.regional_code.regional_code == \"819\" \nor widgets.regional_code.regional_code == \"873\" \n%}true{% else %}false{% endif %}",
+            "key": "is_local"
+          }
+        ],
+        "offset": {
+          "x": -350,
+          "y": -590
+        }
+      }
+    },
+    {
+      "name": "split_by_region",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "geoblocked_message",
+          "event": "noMatch"
+        },
+        {
+          "next": "is_testing",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to true",
+              "arguments": ["{{widgets.is_local.is_local}}"],
+              "type": "equal_to",
+              "value": "true"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.is_local.is_local}}",
+        "offset": {
+          "x": -350,
+          "y": -360
+        }
+      }
+    },
+    {
+      "name": "geoblocked_message",
+      "type": "say-play",
+      "transitions": [
+        {
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/geoblocking_student.wav",
+        "offset": {
+          "x": -850,
+          "y": -120
+        },
+        "loop": 1
+      }
+    },
+    {
+      "name": "vacation_closed_message",
+      "type": "say-play",
+      "transitions": [
+        {
+          "next": "closed_message",
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/summer_vacation_2022.mp3",
+        "offset": {
+          "x": -2010,
+          "y": 770
+        },
+        "loop": 1
+      }
+    },
+    {
+      "name": "scheduler_closed_message_audio",
+      "type": "say-play",
+      "transitions": [
+        {
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://static.alloprof.qc.ca/twilio/flow/flex_direct_parents_phone_flow/assets/audio/closed_message_summer_break.mp3",
+        "offset": {
+          "x": -1200,
+          "y": 1270
+        },
+        "loop": 1
+      }
+    },
+    {
+      "name": "waiting_message_secondary",
+      "type": "say-play",
+      "transitions": [
+        {
+          "next": "send_to_agent_sec",
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/ap-choix.wav",
+        "offset": {
+          "x": 240,
+          "y": 2980
+        },
+        "loop": 1
+      }
+    },
+    {
+      "name": "en_waiting_message_secondary",
+      "type": "say-play",
+      "transitions": [
+        {
+          "next": "en_send_to_agent_sec",
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/en_ap-choix.wav",
+        "voice": "alice",
+        "offset": {
+          "x": 1270,
+          "y": 2960
+        },
+        "loop": 1,
+        "language": "en-CA"
+      }
+    },
+    {
+      "name": "check_schedule",
+      "type": "run-function",
+      "transitions": [
+        {
+          "next": "is_open",
+          "event": "success"
+        },
+        {
+          "event": "fail"
+        }
+      ],
+      "properties": {
+        "service_sid": "${SCHEDULE_MANAGER_SID}",
+        "environment_sid": "${SCHEDULE_MANAGER_ENV_SID}",
+        "offset": {
+          "x": -750,
+          "y": 440
+        },
+        "function_sid": "${FUNCTION_CHECK_SCHEDULE_SID}",
+        "parameters": [
+          {
+            "value": "Example",
+            "key": "name"
+          }
+        ],
+        "url": "https://${SCHEDULE_MANAGER_DOMAIN}/check-schedule"
+      }
+    },
+    {
+      "name": "is_open",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "welcome_message_closed",
+          "event": "noMatch"
+        },
+        {
+          "next": "welcome_message_open",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to true",
+              "arguments": ["{{widgets.check_schedule.parsed.isOpen}}"],
+              "type": "equal_to",
+              "value": "true"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.check_schedule.parsed.isOpen}}",
+        "offset": {
+          "x": -740,
+          "y": 720
+        }
+      }
+    }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
+  }
+}

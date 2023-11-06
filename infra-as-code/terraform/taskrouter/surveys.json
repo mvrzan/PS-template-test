@@ -1,0 +1,15 @@
+{
+  "task_routing": {
+    "filters": [
+      {
+        "filter_friendly_name": "Survey_routing",
+        "expression": "1==1",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_SURVEY}"
+          }
+        ]
+      }
+    ]
+  }
+}

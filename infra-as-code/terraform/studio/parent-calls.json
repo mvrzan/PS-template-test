@@ -1,0 +1,433 @@
+{
+  "description": "FLEX - Direct parents phone flow",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "event": "incomingMessage"
+        },
+        {
+          "next": "regional_code",
+          "event": "incomingCall"
+        },
+        {
+          "event": "incomingConversationMessage"
+        },
+        {
+          "event": "incomingRequest"
+        },
+        {
+          "event": "incomingParent"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 260,
+          "y": -1050
+        }
+      }
+    },
+    {
+      "name": "send_to_agent",
+      "type": "send-to-flex",
+      "transitions": [
+        {
+          "event": "callComplete"
+        },
+        {
+          "event": "failedToEnqueue"
+        },
+        {
+          "event": "callFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1750,
+          "y": 1900
+        },
+        "workflow": "${WORKFLOW_SID_DIRECT_PHONE_MATCH_SUBJECT_GROUP}",
+        "channel": "${VOICE_CHANNEL_SID}",
+        "attributes": "{\n\"name\": \"Appel direct: Parents\",\n\"subject_group\": \"parents\",\n\"language\": \"service_francais\"\n}",
+        "priority": "50"
+      }
+    },
+    {
+      "name": "is_testing",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "testing",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{%- if trigger.call.To == '+14386013312'  -%}\n true\n{%- endif -%}",
+            "key": "testing"
+          }
+        ],
+        "offset": {
+          "x": 1130,
+          "y": -120
+        }
+      }
+    },
+    {
+      "name": "testing",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "check_schedule",
+          "event": "noMatch"
+        },
+        {
+          "next": "welcome_message_open",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to True",
+              "arguments": ["{{widgets.is_testing.testing}}"],
+              "type": "equal_to",
+              "value": "True"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.is_testing.testing}}",
+        "offset": {
+          "x": 1130,
+          "y": 150
+        }
+      }
+    },
+    {
+      "name": "welcome_message_closed",
+      "type": "say-play",
+      "transitions": [
+        {
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/ap-parents-ferme.wav",
+        "offset": {
+          "x": 920,
+          "y": 1030
+        },
+        "loop": 1
+      }
+    },
+    {
+      "name": "message_fr",
+      "type": "say-play",
+      "transitions": [
+        {
+          "next": "send_to_agent",
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://static.alloprof.qc.ca/twilio/flow/flex_direct_parents_phone_flow/assets/audio/transfer_to_agent_with_law_25_compliance_fr.mp3",
+        "offset": {
+          "x": 1750,
+          "y": 1630
+        },
+        "loop": 1
+      }
+    },
+    {
+      "name": "language_select",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "language_split",
+          "event": "keypress"
+        },
+        {
+          "event": "speech"
+        },
+        {
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/ap-parents-choix.wav",
+        "voice": "alice",
+        "number_of_digits": 1,
+        "speech_timeout": "auto",
+        "offset": {
+          "x": 2050,
+          "y": 930
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "language": "fr-CA",
+        "stop_gather": true,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 5
+      }
+    },
+    {
+      "name": "language_split",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "language_select",
+          "event": "noMatch"
+        },
+        {
+          "next": "message_fr",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to 1",
+              "arguments": ["{{widgets.language_select.Digits}}"],
+              "type": "equal_to",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "next": "message_en",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to 2",
+              "arguments": ["{{widgets.language_select.Digits}}"],
+              "type": "equal_to",
+              "value": "2"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.language_select.Digits}}",
+        "offset": {
+          "x": 1840,
+          "y": 1220
+        }
+      }
+    },
+    {
+      "name": "message_en",
+      "type": "say-play",
+      "transitions": [
+        {
+          "next": "en_send_to_agent",
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://static.alloprof.qc.ca/twilio/flow/flex_direct_parents_phone_flow/assets/audio/transfer_to_agent_with_law_25_compliance_en.mp3",
+        "voice": "alice",
+        "offset": {
+          "x": 2100,
+          "y": 1630
+        },
+        "loop": 1,
+        "language": "en-CA"
+      }
+    },
+    {
+      "name": "en_send_to_agent",
+      "type": "send-to-flex",
+      "transitions": [
+        {
+          "event": "callComplete"
+        },
+        {
+          "event": "failedToEnqueue"
+        },
+        {
+          "event": "callFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 2100,
+          "y": 1900
+        },
+        "workflow": "${WORKFLOW_SID_DIRECT_PHONE_MATCH_SUBJECT_GROUP}",
+        "channel": "${VOICE_CHANNEL_SID}",
+        "attributes": "{\n\"name\": \"Appel direct: Parents\",\n\"subject_group\": \"parents\",\n\"language\": \"service_anglais\"\n}",
+        "priority": "50"
+      }
+    },
+    {
+      "name": "regional_code",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "is_local",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{{trigger.call.From | slice : 2,3}}",
+            "key": "regional_code"
+          }
+        ],
+        "offset": {
+          "x": 400,
+          "y": -830
+        }
+      }
+    },
+    {
+      "name": "is_local",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "split_by_region",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{% if widgets.regional_code.regional_code == \"263\" \nor widgets.regional_code.regional_code == \"354\" \nor widgets.regional_code.regional_code == \"367\" \nor widgets.regional_code.regional_code == \"418\" \nor widgets.regional_code.regional_code == \"438\" \nor widgets.regional_code.regional_code == \"450\" \nor widgets.regional_code.regional_code == \"468\" \nor widgets.regional_code.regional_code == \"514\" \nor widgets.regional_code.regional_code == \"579\" \nor widgets.regional_code.regional_code == \"581\" \nor widgets.regional_code.regional_code == \"819\" \nor widgets.regional_code.regional_code == \"873\" \n%}true{% else %}false{% endif %}",
+            "key": "is_local"
+          }
+        ],
+        "offset": {
+          "x": 400,
+          "y": -600
+        }
+      }
+    },
+    {
+      "name": "split_by_region",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "geoblocked_message",
+          "event": "noMatch"
+        },
+        {
+          "next": "is_testing",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to true",
+              "arguments": ["{{widgets.is_local.is_local}}"],
+              "type": "equal_to",
+              "value": "true"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.is_local.is_local}}",
+        "offset": {
+          "x": 400,
+          "y": -370
+        }
+      }
+    },
+    {
+      "name": "geoblocked_message",
+      "type": "say-play",
+      "transitions": [
+        {
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/geoblocking_parent.wav",
+        "offset": {
+          "x": -100,
+          "y": -120
+        },
+        "loop": 1
+      }
+    },
+    {
+      "name": "welcome_message_open",
+      "type": "say-play",
+      "transitions": [
+        {
+          "next": "language_select",
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/ap-parents-bienvenue.wav",
+        "offset": {
+          "x": 1870,
+          "y": 590
+        },
+        "loop": 1
+      }
+    },
+    {
+      "name": "check_schedule",
+      "type": "run-function",
+      "transitions": [
+        {
+          "next": "is_open",
+          "event": "success"
+        },
+        {
+          "event": "fail"
+        }
+      ],
+      "properties": {
+        "service_sid": "${SCHEDULE_MANAGER_SID}",
+        "environment_sid": "${SCHEDULE_MANAGER_ENV_SID}",
+        "offset": {
+          "x": 900,
+          "y": 470
+        },
+        "function_sid": "${FUNCTION_CHECK_SCHEDULE_SID}",
+        "parameters": [
+          {
+            "value": "Example",
+            "key": "name"
+          }
+        ],
+        "url": "https://${SCHEDULE_MANAGER_DOMAIN}/check-schedule"
+      }
+    },
+    {
+      "name": "is_open",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "welcome_message_closed",
+          "event": "noMatch"
+        },
+        {
+          "next": "welcome_message_open",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to true",
+              "arguments": ["{{widgets.check_schedule.parsed.isOpen}}"],
+              "type": "equal_to",
+              "value": "true"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.check_schedule.parsed.isOpen}}",
+        "offset": {
+          "x": 910,
+          "y": 700
+        }
+      }
+    }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
+  }
+}

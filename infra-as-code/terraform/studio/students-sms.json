@@ -1,0 +1,1115 @@
+{
+  "description": "A New Flow",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "event": "incomingMessage"
+        },
+        {
+          "event": "incomingCall"
+        },
+        {
+          "next": "regional_code",
+          "event": "incomingConversationMessage"
+        },
+        {
+          "event": "incomingRequest"
+        },
+        {
+          "event": "incomingParent"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -690,
+          "y": -2360
+        }
+      }
+    },
+    {
+      "name": "closed_message",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "closed_close_session",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -2470,
+          "y": 720
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Tu peux poser ta question dans la Zone d’entraide, toujours ouverte! Nos profs sont là pour toi du lundi au jeudi de 17 h à 20 h et le dimanche de 13 h à 17 h. You can ask your question in our Help Zone, which is always open!  Our teachers are here for you Monday to Thursday from 5 p.m. to 8 p.m., and on Sundays from 1 p.m. to 5 p.m."
+      }
+    },
+    {
+      "name": "is_testing",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "testing",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{%- if trigger.conversation.ChannelAttributes.twilioNumber == '+14386013307' -%}\n true\n{%- elsif trigger.conversation.From == '+14502305865' -%}\n true\n{%- elsif trigger.conversation.From == '+15148200563' -%}\n true\n{%- elsif trigger.conversation.From == '+14389984312' -%}\n true\n{%- endif -%}",
+            "key": "testing"
+          },
+          {
+            "value": "{{widgets.is_phone_in_session.parsed.language}}",
+            "key": "survey_language"
+          }
+        ],
+        "offset": {
+          "x": -500,
+          "y": -540
+        }
+      }
+    },
+    {
+      "name": "testing",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "check_schedule",
+          "event": "noMatch"
+        },
+        {
+          "next": "language_select",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to True",
+              "arguments": ["{{widgets.is_testing.testing}}"],
+              "type": "equal_to",
+              "value": "True"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.is_testing.testing}}",
+        "offset": {
+          "x": -500,
+          "y": -310
+        }
+      }
+    },
+    {
+      "name": "is_in_survey",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "select_route",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{{widgets.is_phone_in_session.parsed.exists}}",
+            "key": "in_survey"
+          },
+          {
+            "value": "{{widgets.is_phone_in_session.parsed.language}}",
+            "key": "survey_language"
+          }
+        ],
+        "offset": {
+          "x": -490,
+          "y": -1080
+        }
+      }
+    },
+    {
+      "name": "select_route",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "event": "noMatch"
+        },
+        {
+          "next": "is_testing",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to false",
+              "arguments": ["{{widgets.is_in_survey.in_survey}}"],
+              "type": "equal_to",
+              "value": "false"
+            }
+          ]
+        },
+        {
+          "next": "check_response",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to true",
+              "arguments": ["{{widgets.is_in_survey.in_survey}}"],
+              "type": "equal_to",
+              "value": "true"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.is_in_survey.in_survey}}",
+        "offset": {
+          "x": -490,
+          "y": -840
+        }
+      }
+    },
+    {
+      "name": "check_response",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "survey_language_split_unmatched",
+          "event": "noMatch"
+        },
+        {
+          "next": "survey_language_split_matched",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value matches_any_of OUI,oui,non,NON",
+              "arguments": ["{{trigger.conversation.Body}}"],
+              "type": "matches_any_of",
+              "value": "OUI,oui,Oui,non,NON,Non,YES,Yes,yes,No,NO"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{trigger.conversation.Body}}",
+        "offset": {
+          "x": 830,
+          "y": -600
+        }
+      }
+    },
+    {
+      "name": "wrong_answer_fr",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "check_wrong_answer_reply_fr",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "thank_you_timeout",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1150,
+          "y": -30
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Je n'ai pas compris ta réponse. Utilise oui ou non.",
+        "timeout": "60"
+      }
+    },
+    {
+      "name": "check_wrong_answer_reply_fr",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "wrong_answer_fr",
+          "event": "noMatch"
+        },
+        {
+          "next": "sms_message_fr",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value matches_any_of OUI,oui,non,NON",
+              "arguments": ["{{widgets.wrong_answer_fr.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "OUI,oui,Oui,non,NON,Non,YES,Yes,yes,No,NO"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.wrong_answer_fr.inbound.Body}}",
+        "offset": {
+          "x": 900,
+          "y": 440
+        }
+      }
+    },
+    {
+      "name": "thank_you_timeout",
+      "type": "send-message",
+      "transitions": [
+        {
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1210,
+          "y": 200
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Merci!"
+      }
+    },
+    {
+      "name": "close_session",
+      "type": "run-function",
+      "transitions": [
+        {
+          "event": "success"
+        },
+        {
+          "event": "fail"
+        }
+      ],
+      "properties": {
+        "service_sid": "${SERVERLESS_SID}",
+        "environment_sid": "${SERVERLESS_ENV_SID}",
+        "offset": {
+          "x": 1020,
+          "y": 2500
+        },
+        "function_sid": "${CLOSE_CONVERSATION_FUNCTION_SID}",
+        "parameters": [
+          {
+            "value": "{{trigger.conversation.ChannelSid}}",
+            "key": "conversation_sid"
+          }
+        ],
+        "url": "https://${SERVERLESS_DOMAIN}/features/sms-studio-flow-support/close_conversation"
+      }
+    },
+    {
+      "name": "is_phone_in_session",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "is_in_survey",
+          "event": "success"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -500,
+          "y": -1330
+        },
+        "method": "POST",
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "parameters": [
+          {
+            "value": "{{trigger.conversation.Author}}",
+            "key": "number"
+          }
+        ],
+        "url": "https://us-central1-alloprof-production.cloudfunctions.net/commPortal/isPhoneInSession"
+      }
+    },
+    {
+      "name": "sms_message_fr",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "set_choice",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "set_choice",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1240,
+          "y": 1000
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Tu peux aussi nous écrire un commentaire pour nous aider à nous améliorer",
+        "timeout": "120"
+      }
+    },
+    {
+      "name": "save_message_feedback",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "thank_you",
+          "event": "success"
+        },
+        {
+          "next": "thank_you",
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1020,
+          "y": 2000
+        },
+        "method": "POST",
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "parameters": [
+          {
+            "value": "{{trigger.message.ChannelAttributes.pre_engagement_data.originalTaskSid}}",
+            "key": "originalTaskSid"
+          },
+          {
+            "value": "{{trigger.message.ChannelAttributes.pre_engagement_data.userId}}",
+            "key": "userId"
+          },
+          {
+            "value": "{{widgets.set_comment.comment}}",
+            "key": "message"
+          },
+          {
+            "value": "{{trigger.message.ChannelAttributes.from}}",
+            "key": "to"
+          },
+          {
+            "value": "{{trigger.message.ChannelAttributes.twilioNumber}}",
+            "key": "from"
+          },
+          {
+            "value": "{{widgets.set_choice.choice}}",
+            "key": "choice"
+          }
+        ],
+        "url": "https://us-central1-alloprof-production.cloudfunctions.net/commPortal/saveSMSFeedback"
+      }
+    },
+    {
+      "name": "thank_you",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "close_session",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1020,
+          "y": 2270
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "{% if widgets.sms_message_fr.inbound.Body %}\n  Merci!\n{% elsif widgets.sms_message_en.inbound.Body %}\n  Thanks!\n{% else %}\n    {% if widgets.is_in_survey.survey_language == 'service_francais' %}\n       À la prochaine\n    {% elsif widgets.is_in_survey.survey_language == 'service_anglais' %}\n       See you soon!\n    {% endif %}\n{% endif %}"
+      }
+    },
+    {
+      "name": "language_select",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "language_validate",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -340,
+          "y": 110
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Pour texter en français : envoie FR\n To receive messages in English, text EN",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "language_validate",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "language_select",
+          "event": "noMatch"
+        },
+        {
+          "next": "language_variable",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to fr",
+              "arguments": ["{{widgets.language_select.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "FR,Fr,fr,EN,En,en"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.language_select.inbound.Body}}",
+        "offset": {
+          "x": -330,
+          "y": 440
+        }
+      }
+    },
+    {
+      "name": "language_variable",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "language_format",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{{widgets.language_select.inbound.Body|downcase}}",
+            "key": "language"
+          }
+        ],
+        "offset": {
+          "x": -180,
+          "y": 840
+        }
+      }
+    },
+    {
+      "name": "subject",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "Copy_of_send_to_agent",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{%- if trigger.message.ChannelAttributes.twilioNumber == '+14386013307' -%}\n  math\n{%- elsif trigger.message.ChannelAttributes.twilioNumber == '+15147001971' -%}\n  math\n{%- elsif trigger.message.ChannelAttributes.twilioNumber == '+15147001972' -%}\n  francais\n{%- elsif trigger.message.ChannelAttributes.twilioNumber == '+15147001973' -%}\n  sciences\n{%- elsif trigger.message.ChannelAttributes.twilioNumber == '+15147001974' -%}\n  autre\n{%- endif -%}",
+            "key": "subject"
+          }
+        ],
+        "offset": {
+          "x": -170,
+          "y": 1420
+        }
+      }
+    },
+    {
+      "name": "Copy_of_send_to_agent",
+      "type": "send-to-flex",
+      "transitions": [
+        {
+          "event": "callComplete"
+        },
+        {
+          "event": "failedToEnqueue"
+        },
+        {
+          "event": "callFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -170,
+          "y": 1720
+        },
+        "workflow": "${WORKFLOW_SID_DIRECT_SMS_MATCH_SUBJECT_GROUP}",
+        "channel": "${SMS_CHANNEL_SID}",
+        "attributes": "{\n\"name\": \"SMS direct: {{widgets.subject.subject}}\",\n\"to\":\" {{trigger.message.ChannelAttributes.from}}\",\n\"from\":\" {{trigger.message.ChannelAttributes.twilioNumber}}\",\n\"subject_group\": \"{{widgets.subject.subject}}\",\n\"language\": \"{{flow.variables.formatted_language}}\" ,\n\"conversations\": {\n\"conversation_attribute_3\":  \"{{widgets.subject.subject}}\",\n\"conversation_attribute_5\":  \"sms_direct\",\n\"conversation_attribute_6\":  \"{{widgets.is_testing.testing}}\",\n\"conversation_attribute_7\":  \"{{flow.variables.formatted_language}}\" \n}\n}",
+        "priority": "50"
+      }
+    },
+    {
+      "name": "language_format",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "subject",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{% if flow.variables.language == 'en' %}service_anglais{% elsif flow.variables.language == 'fr' %}service_francais{% endif %}",
+            "key": "formatted_language"
+          }
+        ],
+        "offset": {
+          "x": -170,
+          "y": 1140
+        }
+      }
+    },
+    {
+      "name": "closed_close_session",
+      "type": "run-function",
+      "transitions": [
+        {
+          "event": "success"
+        },
+        {
+          "event": "fail"
+        }
+      ],
+      "properties": {
+        "service_sid": "${SERVERLESS_SID}",
+        "environment_sid": "${SERVERLESS_ENV_SID}",
+        "offset": {
+          "x": -1950,
+          "y": 1140
+        },
+        "function_sid": "${CLOSE_CONVERSATION_FUNCTION_SID}",
+        "parameters": [
+          {
+            "value": "{{trigger.conversation.ChannelSid}}",
+            "key": "channel_sid"
+          }
+        ],
+        "url": "https://${SERVERLESS_DOMAIN}/features/sms-studio-flow-support/close_conversation"
+      }
+    },
+    {
+      "name": "regional_code",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "is_local",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{{trigger.conversation.Author | slice : 2,3}}",
+            "key": "regional_code"
+          }
+        ],
+        "offset": {
+          "x": -680,
+          "y": -2080
+        }
+      }
+    },
+    {
+      "name": "is_local",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "split_by_region",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{% if widgets.regional_code.regional_code == \"263\" \nor widgets.regional_code.regional_code == \"354\" \nor widgets.regional_code.regional_code == \"367\" \nor widgets.regional_code.regional_code == \"418\" \nor widgets.regional_code.regional_code == \"438\" \nor widgets.regional_code.regional_code == \"450\" \nor widgets.regional_code.regional_code == \"468\" \nor widgets.regional_code.regional_code == \"514\" \nor widgets.regional_code.regional_code == \"579\" \nor widgets.regional_code.regional_code == \"581\" \nor widgets.regional_code.regional_code == \"819\" \nor widgets.regional_code.regional_code == \"873\" \n%}true{% else %}false{% endif %}",
+            "key": "is_local"
+          }
+        ],
+        "offset": {
+          "x": -680,
+          "y": -1840
+        }
+      }
+    },
+    {
+      "name": "split_by_region",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "geoblocked_message",
+          "event": "noMatch"
+        },
+        {
+          "next": "is_phone_in_session",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to true",
+              "arguments": ["{{widgets.is_local.is_local}}"],
+              "type": "equal_to",
+              "value": "true"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.is_local.is_local}}",
+        "offset": {
+          "x": -680,
+          "y": -1600
+        }
+      }
+    },
+    {
+      "name": "geoblocked_message",
+      "type": "send-message",
+      "transitions": [
+        {
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -920,
+          "y": -1320
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Salut! Tu as bien rejoint Alloprof. Malheureusement, nos services sont réservés aux élèves québécois. Visite notre site pour trouver les explications dont tu as besoin au www.alloprof.qc.ca. \nHi there! You’ve reached Alloprof. Unfortunately, our services are reserved for Quebec students only. Please visit our website at www.alloprof.qc.ca to find the explanations you’re looking for."
+      }
+    },
+    {
+      "name": "survey_language_split_matched",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "event": "noMatch"
+        },
+        {
+          "next": "sms_message_en",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to en",
+              "arguments": ["{{widgets.is_in_survey.survey_language}}"],
+              "type": "equal_to",
+              "value": "service_anglais"
+            }
+          ]
+        },
+        {
+          "next": "sms_message_fr",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to fr",
+              "arguments": ["{{widgets.is_in_survey.survey_language}}"],
+              "type": "equal_to",
+              "value": "service_francais"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.is_in_survey.survey_language}}",
+        "offset": {
+          "x": 1920,
+          "y": 160
+        }
+      }
+    },
+    {
+      "name": "sms_message_en",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "set_choice",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "set_choice",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 730,
+          "y": 1000
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "You can also send us feedback to help us improve.",
+        "timeout": "120"
+      }
+    },
+    {
+      "name": "survey_language_split_unmatched",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "event": "noMatch"
+        },
+        {
+          "next": "wrong_answer_en",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to en",
+              "arguments": ["{{widgets.is_in_survey.survey_language}}"],
+              "type": "equal_to",
+              "value": "service_anglais"
+            }
+          ]
+        },
+        {
+          "next": "wrong_answer_fr",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to fr",
+              "arguments": ["{{widgets.is_in_survey.survey_language}}"],
+              "type": "equal_to",
+              "value": "service_francais"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.is_in_survey.survey_language}}",
+        "offset": {
+          "x": 420,
+          "y": -350
+        }
+      }
+    },
+    {
+      "name": "wrong_answer_en",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "check_wrong_answer_reply_en",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "thank_you_timeout_en",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 490,
+          "y": -20
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "I didn’t understand your answer. Text YES or NO",
+        "timeout": "60"
+      }
+    },
+    {
+      "name": "check_wrong_answer_reply_en",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "wrong_answer_en",
+          "event": "noMatch"
+        },
+        {
+          "next": "sms_message_en",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value matches_any_of OUI,oui,non,NON",
+              "arguments": ["{{widgets.wrong_answer_en.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "OUI,oui,Oui,non,NON,Non,YES,Yes,yes,No,NO"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.wrong_answer_en.inbound.Body}}",
+        "offset": {
+          "x": 210,
+          "y": 530
+        }
+      }
+    },
+    {
+      "name": "thank_you_timeout_en",
+      "type": "send-message",
+      "transitions": [
+        {
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 550,
+          "y": 200
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Thank you!"
+      }
+    },
+    {
+      "name": "set_choice",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "set_comment",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{% if widgets.wrong_answer_en.inbound.Body %}{{widgets.wrong_answer_en.inbound.Body}}{% elsif widgets.wrong_answer_fr.inbound.Body %}{{widgets.wrong_answer_fr.inbound.Body}}{% else %} {{trigger.message.Body}} {% endif %}",
+            "key": "choice"
+          }
+        ],
+        "offset": {
+          "x": 1010,
+          "y": 1500
+        }
+      }
+    },
+    {
+      "name": "set_comment",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "save_message_feedback",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{% if widgets.sms_message_en.inbound.Body %}{{widgets.sms_message_en.inbound.Body}}{% elsif widgets.sms_message_fr.inbound.Body %}{{widgets.sms_message_fr.inbound.Body}}{% endif %}",
+            "key": "comment"
+          }
+        ],
+        "offset": {
+          "x": 1010,
+          "y": 1750
+        }
+      }
+    },
+    {
+      "name": "vacations",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "closed_close_session",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -2890,
+          "y": 920
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Alloprof te souhaite de belles vacances! Nos profs seront de retour le 11 juillet pour la période des cours d'été. En attendant, n'hésite pas à poser tes questions dans la Zone d'entraide!\nHi, you have reached Alloprof. It’s summer and our teachers are on vacation! But don’t worry, they’ll be back between July 11th and 31st to give you a hand. Have an urgent question? Visit our Help Zone!"
+      }
+    },
+    {
+      "name": "between-vacations",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "closed_close_session",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1590,
+          "y": 590
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Salut, tu as bien rejoint Alloprof. Nos profs sont là pour te donner un coup de pouce cet été jusqu'au 31 juillet! Pour leur parler, rappelle du lundi au jeudi de 17h à 20h ou le dimanche de 13h à 17h! Ta question presse? Va sur notre site au https://www.alloprof.qc.ca/  et pose-la sur la Zone d'entraide, ouverte 7 jours sur 7! Tu peux aussi profiter des autres ressoures en ligne comme nos tops notions, nos fiches explicatives et nos MiniRécups!\nHi, you have reached Alloprof. Our teachers are available to lend you a hand this summer until July 31. To speak to one, give us a call Monday to Thursday from 5 p.m. to 8 p.m., or on Sundays from 1 p.m. to 5 p.m. Have an urgent question? Visit our website at https://www.alloprof.qc.ca/  and post it in our Help Zone, open 7 days a week! You can also access our other online resources, such as our Core Concepts, revision pages, and Crash Lessons."
+      }
+    },
+    {
+      "name": "fetch_messages",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "scheduler_closed_message_sms",
+          "event": "success"
+        },
+        {
+          "next": "between-vacations",
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1840,
+          "y": 240
+        },
+        "method": "GET",
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "url": "https://storage.googleapis.com/alloprof-production-callcenter/callcenter/status.json"
+      }
+    },
+    {
+      "name": "scheduler_closed_message_sms",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "closed_close_session",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -2060,
+          "y": 590
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "{{widgets.fetch_messages.parsed.messages.sms.iv}}"
+      }
+    },
+    {
+      "name": "check_schedule",
+      "type": "run-function",
+      "transitions": [
+        {
+          "next": "is_open",
+          "event": "success"
+        },
+        {
+          "event": "fail"
+        }
+      ],
+      "properties": {
+        "service_sid": "${SCHEDULE_MANAGER_SID}",
+        "environment_sid": "${SCHEDULE_MANAGER_ENV_SID}",
+        "offset": {
+          "x": -960,
+          "y": -80
+        },
+        "function_sid": "${FUNCTION_CHECK_SCHEDULE_SID}",
+        "parameters": [
+          {
+            "value": "Example",
+            "key": "name"
+          }
+        ],
+        "url": "https://${SCHEDULE_MANAGER_DOMAIN}/check-schedule"
+      }
+    },
+    {
+      "name": "is_open",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "event": "noMatch"
+        },
+        {
+          "next": "language_select",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to true",
+              "arguments": ["{{widgets.check_schedule.parsed.isOpen}}"],
+              "type": "equal_to",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "next": "fetch_messages",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to false",
+              "arguments": ["{{widgets.check_schedule.parsed.isOpen}}"],
+              "type": "equal_to",
+              "value": "false"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.check_schedule.parsed.isOpen}}",
+        "offset": {
+          "x": -950,
+          "y": 200
+        }
+      }
+    }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
+  }
+}

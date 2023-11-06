@@ -22,6 +22,12 @@ module "studio" {
 
 # FEATURE: remove-all
   workflow_sid_assign_to_anyone = module.taskrouter.workflow_sid_assign_to_anyone
+  workflow_sid_assign_to_anyone_prof = module.taskrouter.workflow_sid_assign_to_anyone_prof
+  workflow_sid_direct_sms_match_subject_group = module.taskrouter.workflow_sid_direct_sms_match_subject_group
+  workflow_sid_direct_phone_match_subject_group = module.taskrouter.workflow_sid_direct_phone_match_subject_group
+  function_survey_task_and_conversation_sid = var.SURVEY_TASK_AND_CONVERSATION_FUNCTION_SID
+  function_survey_task_sid = var.SURVEY_TASK_FUNCTION_SID
+  function_close_conversation_sid = var.CLOSE_CONVERSATION_FUNCTION_SID
 # END FEATURE: remove-all
 
 # FEATURE: conversation-transfer
@@ -38,6 +44,7 @@ module "studio" {
 
   chat_channel_sid = module.taskrouter.chat_channel_sid
   voice_channel_sid = module.taskrouter.voice_channel_sid
+  sms_channel_sid = module.taskrouter.sms_channel_sid
   serverless_domain = var.SERVERLESS_DOMAIN
   serverless_sid = var.SERVERLESS_SID
   serverless_env_sid = var.SERVERLESS_ENV_SID

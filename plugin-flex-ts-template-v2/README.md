@@ -2,38 +2,37 @@
 
 This is the _Twilio Professional Services_ Flex Plugin that accompanies the Flex Project Template.
 
-This plugin defines a package structure to make distributed development easier when augmenting Flex with custom features and behaviors. test
+This plugin defines a package structure to make distributed development easier when augmenting Flex with custom features and behaviors.
 
 ---
 
-- [Plugin Flex TS Template V2](#plugin-flex-ts-template-v2)
-- [Overview](#overview)
-- [Feature initialization](#feature-initialization)
-- [Feature library](#feature-library)
-  - [flex-hooks](#flex-hooks)
-    - [actions](#actions)
-    - [channels](#channels)
-    - [chat-orchestrator](#chat-orchestrator)
-    - [components](#components)
-    - [css-overrides](#css-overrides)
-    - [events](#events)
-    - [jsclient-event-listeners](#jsclient-event-listeners)
-    - [notification-events](#notification-events)
-    - [notifications](#notifications)
-    - [paste-elements](#paste-elements)
-    - [reducers](#reducers)
-    - [strings](#strings)
-    - [teams-filters](#teams-filters)
-  - [Adding a feature](#adding-a-feature)
-  - [Usage for a project or single-purpose plugin](#usage-for-a-project-or-single-purpose-plugin)
-- [Types](#types)
-- [Utils](#utils)
-  - [live-query](#live-query)
-  - [serverless](#serverless)
-    - [API Service](#api-service)
-    - [PhoneNumbers](#phonenumbers)
-    - [Programmable Chat](#programmable-chat)
-    - [TaskRouter](#taskrouter)
+1. [Overview](#overview)
+2. [Feature initialization](#feature-initialization)
+3. [Feature library](#feature-library)
+   1. [flex-hooks](#flex-hooks)
+      1. [actions](#actions)
+      1. [channels](#channels)
+      1. [chat-orchestrator](#chat-orchestrator)
+      1. [components](#components)
+      1. [css-overrides](#css-overrides)
+      1. [events](#events)
+      1. [jsclient-event-listeners](#jsclient-event-listeners)
+      1. [notification-events](#notification-events)
+      1. [notifications](#notifications)
+      1. [paste-elements](#paste-elements)
+      1. [reducers](#reducers)
+      1. [strings](#strings)
+      1. [teams-filters](#teams-filters)
+   2. [Adding a feature](#adding-a-feature)
+   3. [Usage for a project or single-purpose plugin](#usage-for-a-project-or-single-purpose-plugin)
+4. [Types](#types)
+5. [Utils](#utils)
+   1. [live-query](#live-query)
+   2. [serverless](#serverless)
+      1. [API Service](#api-service)
+      2. [PhoneNumbers](#phonenumbers)
+      3. [ProgrammableChat](#programmable-chat)
+      4. [TaskRouter](#task-router)
 
 ---
 
@@ -119,7 +118,6 @@ export const actionHook = function exampleCompleteTaskHook(flex: typeof Flex, ma
 ```
 
 Supported values for `actionEvent`:
-
 ```ts
 enum FlexActionEvent {
   before = 'before',
@@ -129,7 +127,6 @@ enum FlexActionEvent {
 ```
 
 Supported values for `actionName`:
-
 ```ts
 enum FlexAction {
   AcceptTask = 'AcceptTask',
@@ -265,7 +262,6 @@ const handleChatComplete = (task: Flex.ITask): any => {
 ```
 
 Supported values for `event`:
-
 ```ts
 enum FlexOrchestrationEvent {
   accepted = 'accepted',
@@ -293,7 +289,6 @@ export const componentHook = function addMyComponentToCallCanvas(flex: typeof Fl
 ```
 
 Supported values for `componentName`:
-
 ```ts
 enum FlexComponent {
   AgentDesktopView = 'AgentDesktopView',
@@ -366,7 +361,6 @@ export const eventHook = function exampleTaskReceivedHandler(
 ```
 
 Supported values for `eventName`:
-
 ```ts
 enum FlexEvent {
   taskReceived = 'taskReceived',
@@ -405,7 +399,6 @@ export const jsClientHook = function exampleConversationJoinedHandler(
 ```
 
 Supported values for `clientName`:
-
 ```ts
 enum FlexJsClient {
   conversationsClient = 'conversationsClient',
@@ -415,7 +408,6 @@ enum FlexJsClient {
 ```
 
 Supported values for `eventName`:
-
 ```ts
 enum ConversationEvent {
   conversationJoined = 'conversationJoined',

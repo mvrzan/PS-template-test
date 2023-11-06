@@ -43,8 +43,8 @@
       ],
       "properties": {
         "offset": {
-          "x": 270,
-          "y": 540
+          "x": -150,
+          "y": 530
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
@@ -63,6 +63,7 @@
           "event": "incomingMessage"
         },
         {
+          "next": "Copy_of_function_1",
           "event": "timeout"
         },
         {
@@ -79,7 +80,7 @@
         "from": "{{flow.channel.address}}",
         "message_type": "custom",
         "body": "Please press 1 if you are happy with the service provided or press 9 if you are dissatisfied.",
-        "timeout": "300"
+        "timeout": "360"
       }
     },
     {
@@ -94,13 +95,13 @@
         }
       ],
       "properties": {
-        "service_sid": "ZSb165c3cb52617d7b06387d2c2c58db7d",
-        "environment_sid": "ZE0fd05965cebcd85b37c70d917e43e07c",
+        "service_sid": "${SERVERLESS_SID}",
+        "environment_sid": "${SERVERLESS_ENV_SID}",
         "offset": {
-          "x": 270,
-          "y": 790
+          "x": -150,
+          "y": 800
         },
-        "function_sid": "ZH23e6f2b68344c1c237a01c22d852c46b",
+        "function_sid": "${SURVEY_TASK_AND_CONVERSATION_FUNCTION_SID}",
         "parameters": [
           {
             "value": "{{trigger.conversation.ChannelAttributes.taskSid}}",
@@ -115,7 +116,43 @@
             "key": "conversationSid"
           }
         ],
-        "url": "https://custom-flex-extensions-serverless-5850-dev.twil.io/sms-suvery"
+        "url": "https://${SERVERLESS_DOMAIN}/features/sms-surveys/sms-survey-task-update"
+      }
+    },
+    {
+      "name": "Copy_of_function_1",
+      "type": "run-function",
+      "transitions": [
+        {
+          "event": "success"
+        },
+        {
+          "event": "fail"
+        }
+      ],
+      "properties": {
+        "service_sid": "${SERVERLESS_SID}",
+        "environment_sid": "${SERVERLESS_ENV_SID}",
+        "offset": {
+          "x": 260,
+          "y": 800
+        },
+        "function_sid": "${SURVEY_TASK_AND_CONVERSATION_FUNCTION_SID}",
+        "parameters": [
+          {
+            "value": "{{trigger.conversation.ChannelAttributes.taskSid}}",
+            "key": "taskSid"
+          },
+          {
+            "value": "0",
+            "key": "customerRating"
+          },
+          {
+            "value": "{{trigger.conversation.ConversationSid}}",
+            "key": "conversationSid"
+          }
+        ],
+        "url": "https://${SERVERLESS_DOMAIN}/features/sms-surveys/sms-survey-task-update"
       }
     }
   ],

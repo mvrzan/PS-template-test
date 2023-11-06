@@ -7,6 +7,51 @@ variable "workflow_sid_assign_to_anyone" {
     error_message = "workflow_sid_assign_to_anyone expected to start with \"WW\"."
   }
 }
+
+variable "workflow_sid_assign_to_anyone_prof" {
+  type        = string
+  description = "SID of the Assign To Anyone workflow"
+  validation {
+    condition     = length(var.workflow_sid_assign_to_anyone_prof) > 2 && substr(var.workflow_sid_assign_to_anyone_prof, 0, 2) == "WW"
+    error_message = "workflow_sid_assign_to_anyone_prof expected to start with \"WW\"."
+  }
+}
+
+variable "workflow_sid_direct_sms_match_subject_group" {
+  type        = string
+  description = "SID of the Assign To Anyone workflow"
+  validation {
+    condition     = length(var.workflow_sid_direct_sms_match_subject_group) > 2 && substr(var.workflow_sid_direct_sms_match_subject_group, 0, 2) == "WW"
+    error_message = "workflow_sid_direct_sms_match_subject_group expected to start with \"WW\"."
+  }
+}
+
+variable "workflow_sid_direct_phone_match_subject_group" {
+  type        = string
+  description = "SID of the Assign To Anyone workflow"
+  validation {
+    condition     = length(var.workflow_sid_direct_phone_match_subject_group) > 2 && substr(var.workflow_sid_direct_phone_match_subject_group, 0, 2) == "WW"
+    error_message = "workflow_sid_direct_phone_match_subject_group expected to start with \"WW\"."
+  }
+}
+
+variable "function_survey_task_and_conversation_sid" {
+  type        = string
+  description = "get customer by phone function sid"
+  validation {
+    condition     = length(var.function_survey_task_and_conversation_sid) > 2 && substr(var.function_survey_task_and_conversation_sid, 0, 2) == "ZH"
+    error_message = "function_survey_task_and_conversation_sid expected to start with \"ZH\"."
+  }
+}
+
+variable "function_survey_task_sid" {
+  type        = string
+  description = "get customer by phone function sid"
+  validation {
+    condition     = length(var.function_survey_task_sid) > 2 && substr(var.function_survey_task_sid, 0, 2) == "ZH"
+    error_message = "function_survey_task_sid expected to start with \"ZH\"."
+  }
+}
 # END FEATURE: remove-all
 
 # FEATURE: conversation-transfer
@@ -57,6 +102,15 @@ variable "voice_channel_sid" {
   validation {
     condition     = length(var.voice_channel_sid) > 2 && substr(var.voice_channel_sid, 0, 2) == "TC"
     error_message = "voice_channel_sid expected to start with \"TC\"."
+  }
+}
+
+variable "sms_channel_sid" {
+  type        = string
+  description = "SID of sms task channel"
+  validation {
+    condition     = length(var.sms_channel_sid) > 2 && substr(var.sms_channel_sid, 0, 2) == "TC"
+    error_message = "sms_channel_sid expected to start with \"TC\"."
   }
 }
 
@@ -121,6 +175,15 @@ variable "function_check_schedule_sid" {
   validation {
     condition     = length(var.function_check_schedule_sid) > 2 && substr(var.function_check_schedule_sid, 0, 2) == "ZH"
     error_message = "function_check_schedule_sid expected to start with \"ZH\"."
+  }
+}
+
+variable "function_close_conversation_sid" {
+  type        = string
+  description = "get customer by phone function sid"
+  validation {
+    condition     = length(var.function_close_conversation_sid) > 2 && substr(var.function_close_conversation_sid, 0, 2) == "ZH"
+    error_message = "function_close_conversation_sid expected to start with \"ZH\"."
   }
 }
 

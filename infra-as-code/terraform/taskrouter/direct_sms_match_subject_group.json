@@ -1,0 +1,65 @@
+{
+  "task_routing": {
+    "filters": [
+      {
+        "filter_friendly_name": "Math",
+        "expression": "subject_group == \"math\"",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_PROFS}",
+            "expression": "(worker.routing.skills HAS \"math_secondaire_1-2\"OR worker.routing.skills HAS \"math_secondaire_3-5\"OR worker.routing.skills HAS \"math_primaire\") AND worker.routing.skills HAS task.language",
+            "timeout": 1
+          },
+          {
+            "expression": "(worker.routing.skills HAS \"math_secondaire_1-2\"OR worker.routing.skills HAS \"math_secondaire_3-5\"OR worker.routing.skills HAS \"math_primaire\")"
+          }
+        ]
+      },
+      {
+        "filter_friendly_name": "Français",
+        "expression": "subject_group == \"francais\"",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_PROFS}",
+            "expression": "(worker.routing.skills HAS \"francais_secondaire\"OR worker.routing.skills HAS \"francais_primaire\") AND worker.routing.skills HAS task.language",
+            "timeout": 1
+          },
+          {
+            "expression": "(worker.routing.skills HAS \"francais_secondaire\"OR worker.routing.skills HAS \"francais_primaire\")"
+          }
+        ]
+      },
+      {
+        "filter_friendly_name": "Sciences",
+        "expression": "subject_group==\"sciences\"",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_PROFS}",
+            "expression": "(worker.routing.skills HAS \"sciences_primaire\"OR worker.routing.skills HAS \"sciences_secondaire\"OR worker.routing.skills HAS \"physique\"OR worker.routing.skills HAS \"chimie\") AND worker.routing.skills HAS task.language",
+            "timeout": 1
+          },
+          {
+            "expression": "(worker.routing.skills HAS \"sciences_primaire\"OR worker.routing.skills HAS \"sciences_secondaire\"OR worker.routing.skills HAS \"physique\"OR worker.routing.skills HAS \"chimie\")"
+          }
+        ]
+      },
+      {
+        "filter_friendly_name": "Autre",
+        "expression": "subject_group==\"autre\"",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_PROFS}",
+            "expression": "(worker.routing.skills HAS \"anglais_primaire\"OR worker.routing.skills HAS \"anglais_secondaire\"OR worker.routing.skills HAS \"education_financiere\"OR worker.routing.skills HAS \"geographie_primaire\"OR worker.routing.skills HAS \"geographie_secondaire\"OR worker.routing.skills HAS \"histoire_primaire\"OR worker.routing.skills HAS \"histoire_secondaire\"OR worker.routing.skills HAS \"monde_contemporain\") AND worker.routing.skills HAS task.language",
+            "timeout": 1
+          },
+          {
+            "expression": "(worker.routing.skills HAS \"anglais_primaire\"OR worker.routing.skills HAS \"anglais_secondaire\"OR worker.routing.skills HAS \"education_financiere\"OR worker.routing.skills HAS \"geographie_primaire\"OR worker.routing.skills HAS \"geographie_secondaire\"OR worker.routing.skills HAS \"histoire_primaire\"OR worker.routing.skills HAS \"histoire_secondaire\"OR worker.routing.skills HAS \"monde_contemporain\")"
+          }
+        ]
+      }
+    ],
+    "default_filter": {
+      "queue": "${QUEUE_SID_PROFS}"
+    }
+  }
+}

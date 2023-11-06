@@ -62,5 +62,38 @@
     "type": "tr-workflow",
     "name": "Internal Call",
     "parent": "TWILIO_FLEX_WORKSPACE_SID"
+  },
+  "TWILIO_FLEX_SURVEY_WORKFLOW_SID": {
+    "type": "tr-workflow",
+    "name": "Surveys",
+    "parent": "TWILIO_FLEX_WORKSPACE_SID"
+  },
+  "TWILIO_FLEX_SURVEY_TRANSFER_APP_SID": {
+    "type": "twiml-apps",
+    "name": "survey-transfer"
+  },
+  "TWILIO_FLEX_SURVEY_TASK_CHANNEL_SID": {
+    "type": "tr-task-channel",
+    "name": "Survey",
+    "parent": "TWILIO_FLEX_WORKSPACE_SID"
+  },
+  "TWILIO_FLEX_SMS_SURVEY_FLOW_SID": {
+    "type": "studio-flow",
+    "name": "sms-survey"
+  },
+  "SURVEY_TASK_AND_CONVERSATION_FUNCTION_SID": {
+    "type": "serverless-function",
+    "name": "/sms-survey-task-update",
+    "parent": "SERVERLESS_SID"
+  },
+  "SURVEY_TASK_FUNCTION_SID": {
+    "type": "serverless-function",
+    "name": "/survey-task-update",
+    "parent": "SERVERLESS_SID"
+  },
+  "CLOSE_CONVERSATION_FUNCTION_SID": {
+    "type": "serverless-function",
+    "name": "/close_conversation",
+    "parent": "SERVERLESS_SID"
   }
 }

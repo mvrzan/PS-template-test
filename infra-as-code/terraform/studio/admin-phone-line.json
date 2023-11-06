@@ -1,0 +1,2675 @@
+{
+  "description": "IVR - Admin direct phone flow",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "event": "incomingMessage"
+        },
+        {
+          "next": "welcome_message",
+          "event": "incomingCall"
+        },
+        {
+          "event": "incomingConversationMessage"
+        },
+        {
+          "event": "incomingRequest"
+        },
+        {
+          "event": "incomingParent"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1240,
+          "y": -740
+        }
+      }
+    },
+    {
+      "name": "choice_message",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "next": "choix",
+          "event": "keypress"
+        },
+        {
+          "event": "speech"
+        },
+        {
+          "next": "timeout",
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "play": "https://static.alloprof.qc.ca/twilio/flow/ivr_admin_direct_phone/assets/audio/ap-admin-menu-fr.wav",
+        "number_of_digits": 3,
+        "speech_timeout": "auto",
+        "offset": {
+          "x": -1150,
+          "y": -310
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "stop_gather": true,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 10
+      }
+    },
+    {
+      "name": "choix",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "event": "noMatch"
+        },
+        {
+          "next": "LaurenceDeTilly",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "0",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "0"
+            }
+          ]
+        },
+        {
+          "next": "Alexandra",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "101",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "101"
+            }
+          ]
+        },
+        {
+          "next": "Catalina",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "102",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "102"
+            }
+          ]
+        },
+        {
+          "next": "Andreanne",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "103",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "103"
+            }
+          ]
+        },
+        {
+          "next": "Andreea",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "104",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "104"
+            }
+          ]
+        },
+        {
+          "next": "Annick",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "105",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "105"
+            }
+          ]
+        },
+        {
+          "next": "AshleyMegane",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "106",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "106"
+            }
+          ]
+        },
+        {
+          "next": "Audrey",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "107",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "107"
+            }
+          ]
+        },
+        {
+          "next": "Baptiste",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "108",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "108"
+            }
+          ]
+        },
+        {
+          "next": "Bianca",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "109",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "109"
+            }
+          ]
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "110",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "110"
+            }
+          ]
+        },
+        {
+          "next": "Amelie",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "111",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "111"
+            }
+          ]
+        },
+        {
+          "next": "Charles",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "112",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "112"
+            }
+          ]
+        },
+        {
+          "next": "Claudia",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "113",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "113"
+            }
+          ]
+        },
+        {
+          "next": "Clement",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "114",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "114"
+            }
+          ]
+        },
+        {
+          "next": "Daniela",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "115",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "115"
+            }
+          ]
+        },
+        {
+          "next": "DavidFontaine",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "116",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "116"
+            }
+          ]
+        },
+        {
+          "next": "DavidGagne",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "117",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "117"
+            }
+          ]
+        },
+        {
+          "next": "Doriane",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "118",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "118"
+            }
+          ]
+        },
+        {
+          "next": "Eleni",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "119",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "119"
+            }
+          ]
+        },
+        {
+          "next": "Sandrine",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "120",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "120"
+            }
+          ]
+        },
+        {
+          "next": "Elise",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "121",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "121"
+            }
+          ]
+        },
+        {
+          "next": "Elizabeth",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "122",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "122"
+            }
+          ]
+        },
+        {
+          "next": "Etienne",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "123",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "123"
+            }
+          ]
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "124",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "124"
+            }
+          ]
+        },
+        {
+          "next": "EvelineTrudelFugere",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "125",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "125"
+            }
+          ]
+        },
+        {
+          "next": "EvelynePiche",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "126",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "126"
+            }
+          ]
+        },
+        {
+          "next": "FredBlanchet",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "127",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "127"
+            }
+          ]
+        },
+        {
+          "next": "FredCharest",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "128",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "128"
+            }
+          ]
+        },
+        {
+          "next": "GabrielBelangerFleury",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "129",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "129"
+            }
+          ]
+        },
+        {
+          "next": "GabrielNormandRoy",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "130",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "130"
+            }
+          ]
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "131",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "131"
+            }
+          ]
+        },
+        {
+          "next": "Ghada",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "132",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "132"
+            }
+          ]
+        },
+        {
+          "next": "Hossam",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "133",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "133"
+            }
+          ]
+        },
+        {
+          "next": "JeanFrancoisDubreuil",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "134",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "134"
+            }
+          ]
+        },
+        {
+          "next": "JeanFrancoisPilon",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "135",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "135"
+            }
+          ]
+        },
+        {
+          "next": "JessicaEgan",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "136",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "136"
+            }
+          ]
+        },
+        {
+          "next": "JessicaVillneuve",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "137",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "137"
+            }
+          ]
+        },
+        {
+          "next": "Kevin",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "138",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "138"
+            }
+          ]
+        },
+        {
+          "next": "LaurenceDeTilly",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "139",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "139"
+            }
+          ]
+        },
+        {
+          "next": "LaurencePoirier",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "140",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "140"
+            }
+          ]
+        },
+        {
+          "next": "Laurie",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "141",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "141"
+            }
+          ]
+        },
+        {
+          "next": "LuciePerrier",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "142",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "142"
+            }
+          ]
+        },
+        {
+          "next": "Lisa",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "143",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "143"
+            }
+          ]
+        },
+        {
+          "next": "Marali",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "144",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "144"
+            }
+          ]
+        },
+        {
+          "next": "Maria",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "145",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "145"
+            }
+          ]
+        },
+        {
+          "next": "Marianne",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "146",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "146"
+            }
+          ]
+        },
+        {
+          "next": "MarieCaroline",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "147",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "147"
+            }
+          ]
+        },
+        {
+          "next": "MarieEve",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "148",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "148"
+            }
+          ]
+        },
+        {
+          "next": "MarieIsabelle",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "149",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "149"
+            }
+          ]
+        },
+        {
+          "next": "MarieJulie",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "150",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "150"
+            }
+          ]
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "151",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "151"
+            }
+          ]
+        },
+        {
+          "next": "Marlene",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "152",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "152"
+            }
+          ]
+        },
+        {
+          "next": "Martin",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "153",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "153"
+            }
+          ]
+        },
+        {
+          "next": "Massimo",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "154",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "154"
+            }
+          ]
+        },
+        {
+          "next": "Michelle",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "155",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "155"
+            }
+          ]
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "156",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "156"
+            }
+          ]
+        },
+        {
+          "next": "Nicolas",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "157",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "157"
+            }
+          ]
+        },
+        {
+          "next": "Olivier",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "158",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "158"
+            }
+          ]
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "159",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "159"
+            }
+          ]
+        },
+        {
+          "next": "PascalBonaldo",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "160",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "160"
+            }
+          ]
+        },
+        {
+          "next": "Patricia",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "161",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "161"
+            }
+          ]
+        },
+        {
+          "next": "PierreEmile",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "162",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "162"
+            }
+          ]
+        },
+        {
+          "next": "Raluca",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "163",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "163"
+            }
+          ]
+        },
+        {
+          "next": "Sabrina",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "164",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "164"
+            }
+          ]
+        },
+        {
+          "next": "Samuel",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "165",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "165"
+            }
+          ]
+        },
+        {
+          "next": "Elia",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "166",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "166"
+            }
+          ]
+        },
+        {
+          "next": "SarahAnne",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "167",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "167"
+            }
+          ]
+        },
+        {
+          "next": "Sebastian",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "168",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "168"
+            }
+          ]
+        },
+        {
+          "next": "Sophie",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "169",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "169"
+            }
+          ]
+        },
+        {
+          "next": "Tania",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "170",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "170"
+            }
+          ]
+        },
+        {
+          "next": "Tatiana",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "171",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "171"
+            }
+          ]
+        },
+        {
+          "next": "ValerieBourdon",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "172",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "172"
+            }
+          ]
+        },
+        {
+          "next": "ValerieMartineau",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "173",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "173"
+            }
+          ]
+        },
+        {
+          "next": "VicentTalbot",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "174",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "174"
+            }
+          ]
+        },
+        {
+          "next": "Wassim",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "175",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "175"
+            }
+          ]
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "176",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "176"
+            }
+          ]
+        },
+        {
+          "next": "Loopback",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "888",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "888"
+            }
+          ]
+        },
+        {
+          "next": "MarcAntoineTanguay",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "177",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "177"
+            }
+          ]
+        },
+        {
+          "next": "say_play_1",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "999",
+              "arguments": ["{{widgets.choice_message.Digits}}"],
+              "type": "equal_to",
+              "value": "999"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.choice_message.Digits}}",
+        "offset": {
+          "x": -1290,
+          "y": 110
+        }
+      }
+    },
+    {
+      "name": "Amelie",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1140,
+          "y": 750
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15145920847",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Alexandra",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1140,
+          "y": 550
+        },
+        "caller_id": "514-509-2025",
+        "noun": "number",
+        "to": "+15143494720",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Andreanne",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1140,
+          "y": 950
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15149931342",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Catalina",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -800,
+          "y": 550
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15145838354",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Audrey",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1140,
+          "y": 1750
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15813075752",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Baptiste",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1140,
+          "y": 1970
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14383508588",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Annick",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1140,
+          "y": 1350
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14189060579",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "AshleyMegane",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1140,
+          "y": 1550
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15149153391",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Andreea",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1140,
+          "y": 1150
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15143781623",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Claudia",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -800,
+          "y": 950
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14388635580",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Charles",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -800,
+          "y": 750
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14185588718",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Clement",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -800,
+          "y": 1150
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+33695338013",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Bianca",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1140,
+          "y": 2180
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14388700421",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "welcome_message",
+      "type": "say-play",
+      "transitions": [
+        {
+          "next": "choice_message",
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/ap-admin-bienvenue.wav",
+        "offset": {
+          "x": -1090,
+          "y": -590
+        },
+        "loop": 1
+      }
+    },
+    {
+      "name": "timeout",
+      "type": "say-play",
+      "transitions": [
+        {
+          "next": "choice_message",
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/ap-admin-timeout.wav",
+        "offset": {
+          "x": -460,
+          "y": -320
+        },
+        "loop": 1
+      }
+    },
+    {
+      "name": "Loopback",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 2260,
+          "y": 550
+        },
+        "caller_id": "{{contact.channel.address}}",
+        "noun": "number",
+        "to": "{{trigger.call.From}}",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Daniela",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -800,
+          "y": 1350
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15149701616",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Template",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1690,
+          "y": 630
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+1",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "DavidFontaine",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -800,
+          "y": 1550
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15148164472",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "DavidGagne",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -800,
+          "y": 1750
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15148832312",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Doriane",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -800,
+          "y": 1970
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14387225991",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Eleni",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -800,
+          "y": 2180
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15147818595",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Elia",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -800,
+          "y": 2410
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15147915617",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Elise",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -440,
+          "y": 540
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+18198062373",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Elizabeth",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -440,
+          "y": 750
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14188179923",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Etienne",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -440,
+          "y": 950
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15142165934",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "EvelineTrudelFugere",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -440,
+          "y": 1150
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15147042225",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "EvelynePiche",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -440,
+          "y": 1350
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+1",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "FredBlanchet",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -440,
+          "y": 1550
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14184552105",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "FredCharest",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -430,
+          "y": 1750
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15145122768",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "GabrielBelangerFleury",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -440,
+          "y": 1970
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14388882006",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "GabrielNormandRoy",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -440,
+          "y": 2180
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15819891387",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Ghada",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -90,
+          "y": 550
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15144316021",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Hossam",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -90,
+          "y": 750
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15146176072",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "JeanFrancoisDubreuil",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -90,
+          "y": 950
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+18199190084",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "JeanFrancoisPilon",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -90,
+          "y": 1150
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15149136634",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "JessicaEgan",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -90,
+          "y": 1350
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15142192103",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "JessicaVillneuve",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -90,
+          "y": 1550
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14184737224",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Kevin",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -90,
+          "y": 1750
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15145754444",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "LaurenceDeTilly",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -90,
+          "y": 1970
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15146278078",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "LaurencePoirier",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -90,
+          "y": 2180
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14388757870",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Laurie",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -90,
+          "y": 2410
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15819918258",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "LuciePerrier",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 270,
+          "y": 550
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15142372267",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Lisa",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 270,
+          "y": 750
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15147547837",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Marali",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 270,
+          "y": 950
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+18192133941",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Maria",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 270,
+          "y": 1150
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14388682465",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Marianne",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 270,
+          "y": 1350
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15144363248",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "MarieCaroline",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 270,
+          "y": 1550
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14189051620",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "MarieEve",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 270,
+          "y": 1750
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15813052798",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "MarieIsabelle",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 280,
+          "y": 1970
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15148039566",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "MarieJulie",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 270,
+          "y": 2180
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15143735316",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Marlene",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 630,
+          "y": 550
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15148840275",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Martin",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 630,
+          "y": 750
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14188390835",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Massimo",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 630,
+          "y": 950
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14388388969",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Michelle",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 630,
+          "y": 1150
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14182221526",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Nicolas",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 630,
+          "y": 1550
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15819946405",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Olivier",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 630,
+          "y": 1750
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15142081418",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "PascalBonaldo",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 630,
+          "y": 2180
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15147426983",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Patricia",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 630,
+          "y": 2410
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15147077815",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "PierreEmile",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1000,
+          "y": 550
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14383455816",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Raluca",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1000,
+          "y": 750
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14387772633",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Sabrina",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1000,
+          "y": 950
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15148084021",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Samuel",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1000,
+          "y": 1150
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14185545252",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Sandrine",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 990,
+          "y": 1350
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15146539405",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "SarahAnne",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1000,
+          "y": 1550
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14189317133",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Sebastian",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1000,
+          "y": 1750
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15142165297",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Sophie",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1000,
+          "y": 1970
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15145743764",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Tania",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1000,
+          "y": 2180
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14385087686",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Tatiana",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1000,
+          "y": 2410
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15148030165",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "ValerieBourdon",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1370,
+          "y": 550
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15148897761",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "ValerieMartineau",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1370,
+          "y": 750
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15819904621",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "VicentTalbot",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1370,
+          "y": 950
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14182716699",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "Wassim",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1370,
+          "y": 1150
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+14388892417",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "MarcAntoineTanguay",
+      "type": "connect-call-to",
+      "transitions": [
+        {
+          "event": "callCompleted"
+        },
+        {
+          "event": "hangup"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1370,
+          "y": 1550
+        },
+        "caller_id": "5145092025",
+        "noun": "number",
+        "to": "+15144529307",
+        "timeout": 30
+      }
+    },
+    {
+      "name": "say_play_1",
+      "type": "say-play",
+      "transitions": [
+        {
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "play": "https://${SERVERLESS_DOMAIN}/features/migrated-studio-functions/ap-bienvenue.wav",
+        "offset": {
+          "x": 2140,
+          "y": 760
+        },
+        "loop": 1
+      }
+    }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
+  }
+}

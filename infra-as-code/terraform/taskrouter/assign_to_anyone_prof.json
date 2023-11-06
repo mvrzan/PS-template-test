@@ -1,0 +1,32 @@
+{
+  "task_routing": {
+    "filters": [
+      {
+        "expression": "1==1",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_PROFS}",
+            "expression": "worker.routing.skills HAS task.subject_grade AND worker.routing.skills HAS task.language",
+            "timeout": 1
+          },
+          {
+            "queue": "${QUEUE_SID_PROFS}",
+            "expression": "worker.routing.skills HAS task.subject AND worker.routing.skills HAS task.language",
+            "timeout": 1
+          },
+          {
+            "expression": "worker.routing.skills HAS task.subject_grade",
+            "timeout": 1
+          },
+          {
+            "expression": "worker.routing.skills HAS task.subject",
+            "timeout": 1
+          }
+        ]
+      }
+    ],
+    "default_filter": {
+      "queue": "${QUEUE_SID_PROFS}"
+    }
+  }
+}
