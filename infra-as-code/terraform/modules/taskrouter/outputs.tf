@@ -8,6 +8,11 @@ output "workflow_sid_assign_to_anyone" {
   value = twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone.sid
   description = "Assign To Anyone workflow SID"
 }
+
+output "workflow_sid_assign_to_anyone_prof" {
+  value = twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone_prof.sid
+  description = "Assign To Anyone workflow SID"
+}
 # END FEATURE: remove-all
 
 # FEATURE: conversation-transfer

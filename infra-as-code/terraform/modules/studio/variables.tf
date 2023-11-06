@@ -10,7 +10,7 @@ variable "workflow_sid_assign_to_anyone" {
 
 variable "workflow_sid_assign_to_anyone_prof" {
   type        = string
-  description = "SID of the Assign To Anyone workflow"
+  description = "SID of the Assign To Anyone Prof workflow"
   validation {
     condition     = length(var.workflow_sid_assign_to_anyone_prof) > 2 && substr(var.workflow_sid_assign_to_anyone_prof, 0, 2) == "WW"
     error_message = "workflow_sid_assign_to_anyone_prof expected to start with \"WW\"."

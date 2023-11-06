@@ -27,7 +27,7 @@ resource "twilio_taskrouter_workspaces_workflows_v1" "direct_sms_match_subject_g
 resource "twilio_taskrouter_workspaces_workflows_v1" "textback_sms_match_specific_worker" {
   workspace_sid = twilio_taskrouter_workspaces_v1.flex.sid
   friendly_name = "textback - sms - match specific worker"
-  configuration = templatefile("../../taskrouter/textback_sms_match_specific_worker.json.json", local.params)
+  configuration = templatefile("../../taskrouter/textback_sms_match_specific_worker.json", local.params)
 }
 
 resource "twilio_taskrouter_workspaces_workflows_v1" "surveys" {
