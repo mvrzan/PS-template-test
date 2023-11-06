@@ -62,7 +62,7 @@
         "expression": "subject_group == \"sciences\"",
         "targets": [
           {
-            "queue": "WQaa73047a7361859cba43f368057128f0",
+            "queue": "${QUEUE_SID_PROFS}",
             "expression": "(worker.routing.skills HAS \"sciences_secondaire\"OR worker.routing.skills HAS \"physique\"OR worker.routing.skills HAS \"chimie\") AND worker.routing.skills HAS task.language",
             "timeout": 10
           },
@@ -90,7 +90,7 @@
         "expression": "subject_group == \"anglais\"",
         "targets": [
           {
-            "queue": "WQaa73047a7361859cba43f368057128f0",
+            "queue": "${QUEUE_SID_PROFS}",
             "expression": "worker.routing.skills HAS \"anglais_secondaire\" AND worker.routing.skills HAS task.language",
             "timeout": 10
           },
