@@ -44,6 +44,10 @@ importInternalState() {
 
 # FEATURE: remove-all
 	import_resource "$workflows" "Assign to Anyone" "module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone" "friendlyName"
+	import_resource "$workflows" "Assign to Anyone Prof" "module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone_prof" "friendlyName"
+	import_resource "$workflows" "direct - sms - match subject_group" "module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.direct_sms_match_subject_group" "friendlyName"
+	import_resource "$workflows" "textback - sms - match specific worker" "module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.textback_sms_match_specific_worker" "friendlyName"
+	import_resource "$workflows" "Surveys" "module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.surveys" "friendlyName"
 # END FEATURE: remove-all
 
 # FEATURE: conversation-transfer
